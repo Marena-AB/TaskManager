@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            padding: 20px;
+        }
+        .task-container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .task-list li {
+            background-color: #e3e3e3;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-list li button {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .task-list li button:hover {
+            background-color: darkred;
+        }
+        .add-task-form {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .add-task-form input {
+            width: 70%;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .add-task-form button {
+            width: 25%;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-task-form button:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <div class="task-container">
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li>
+                    {{ task }}
+                    <button onclick="deleteTask('{{ task }}')">Delete</button>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <form class="add-task-form" method="POST" action="/tasks">
+            <input type="text" name="task" placeholder="Enter a new task" required />
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+
+    <script>
+        function deleteTask(task) {
+            fetch(`/tasks/${task}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    location.reload();
+                });
+        }
+    </script>
+</body>
+</html>
+
